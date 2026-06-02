@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password     String
+  telefone  String?
+  createdAt DateTime @default(now())
+
+  imoveis   Imovel[]
+}
+
+model Imovel {
+  id          String   @id @default(uuid())
+  titulo      String
+  descricao   String
+  preco       Float
+  cidade      String
+  bairro      String
+  quartos     Int
+  banheiros   Int
+  garagem     Boolean
+  createdAt   DateTime @default(now())
+
+  userId String?
+  user   User? @relation(fields: [userId], references: [id])
+}
