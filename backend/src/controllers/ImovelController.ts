@@ -15,11 +15,10 @@ export class ImovelController {
 
       const imovel = await prisma.imovel.create({
         data: {
-        ...data,
-        userId: req.userId,
-      },
-    });
-
+          ...data,
+          userId: req.userId,
+        },
+      });
 
       return res.status(201).json(imovel);
     } catch (error) {
@@ -74,6 +73,22 @@ export class ImovelController {
     try {
       const id = String(req.params.id);
 
+      const imovel = await prisma.imovel.findUnique({
+        where: { id },
+      });
+
+      if (!imovel) {
+        return res.status(404).json({
+          error: "Imóvel não encontrado",
+        });
+      }
+
+      if (imovel.userId !== req.userId) {
+        return res.status(403).json({
+          error: "Acesso negado",
+        });
+      }
+
       await prisma.imovel.delete({
         where: { id },
       });
@@ -89,7 +104,24 @@ export class ImovelController {
   async update(req: Request, res: Response) {
     try {
       const id = String(req.params.id);
+
       const data = updateImovelSchema.parse(req.body);
+
+      const imovelExistente = await prisma.imovel.findUnique({
+        where: { id },
+      });
+
+      if (!imovelExistente) {
+        return res.status(404).json({
+          error: "Imóvel não encontrado",
+        });
+      }
+
+      if (imovelExistente.userId !== req.userId) {
+        return res.status(403).json({
+          error: "Acesso negado",
+        });
+      }
 
       const imovel = await prisma.imovel.update({
         where: { id },
@@ -106,6 +138,22 @@ export class ImovelController {
 
       return res.status(500).json({
         error: "Erro ao atualizar imóvel",
+      });
+    }
+  }
+
+  async myImoveis(req: Request, res: Response) {
+    try {
+      const imoveis = await prisma.imovel.findMany({
+        where: {
+          userId: req.userId,
+        },
+      });
+
+      return res.json(imoveis);
+    } catch (error) {
+      return res.status(500).json({
+        error: "Erro ao listar seus imóveis",
       });
     }
   }

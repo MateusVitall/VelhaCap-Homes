@@ -41,7 +41,7 @@ export class AuthController {
         {
           id: user.id,
         },
-        "senha-super-secreta",
+        process.env.JWT_SECRET!,
         {
           expiresIn: "7d",
         }

@@ -19,7 +19,7 @@ export function authMiddleware(
   try {
     const decoded = jwt.verify(
       token,
-      "senha-super-secreta"
+      process.env.JWT_SECRET!
     ) as { id: string };
 
     req.userId = decoded.id;
