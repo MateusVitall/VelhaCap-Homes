@@ -34,23 +34,49 @@ export function PropertyForm({
 
   const onFiles = (files: FileList | null) => {
     if (!files) return;
-    Array.from(files).slice(0, 6 - images.length).forEach((f) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const result = reader.result;
-        if (typeof result === "string") setImages((prev) => [...prev, result]);
-      };
-      reader.readAsDataURL(f);
-    });
+    Array.from(files)
+      .slice(0, 6 - images.length)
+      .forEach((f) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result;
+          if (typeof result === "string") setImages((prev) => [...prev, result]);
+        };
+        reader.readAsDataURL(f);
+      });
   };
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (price === "" || !title || !neighborhood) return;
+
+    console.log("SUBMIT DISPARADO");
+
+    console.log({
+      title,
+      description,
+      price,
+      city,
+      neighborhood,
+      bedrooms,
+      bathrooms,
+      garage,
+      ownerName,
+      ownerPhone,
+      images,
+    });
+
     onSubmit({
-      title, description, price: Number(price), city, neighborhood,
-      bedrooms, bathrooms, garage, images: images.length ? images : [],
-      ownerName, ownerPhone,
+      title,
+      description,
+      price: Number(price),
+      city,
+      neighborhood,
+      bedrooms,
+      bathrooms,
+      garage,
+      images,
+      ownerName,
+      ownerPhone,
     });
   };
 
@@ -58,20 +84,43 @@ export function PropertyForm({
     <form onSubmit={submit} className="space-y-8">
       <Section title="Informações principais">
         <Field label="Título do anúncio">
-          <Input required value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Casa charmosa no Centro Histórico" />
+          <Input
+            required
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Casa charmosa no Centro Histórico"
+          />
         </Field>
         <Field label="Descrição">
-          <Textarea required rows={5} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Descreva o imóvel, diferenciais, mobília, proximidade…" />
+          <Textarea
+            required
+            rows={5}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Descreva o imóvel, diferenciais, mobília, proximidade…"
+          />
         </Field>
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Preço mensal (R$)">
-            <Input required type="number" min={0} value={price} onChange={(e) => setPrice(e.target.value === "" ? "" : Number(e.target.value))} placeholder="1500" />
+            <Input
+              required
+              type="number"
+              min={0}
+              value={price}
+              onChange={(e) => setPrice(e.target.value === "" ? "" : Number(e.target.value))}
+              placeholder="1500"
+            />
           </Field>
           <Field label="Cidade">
             <Input required value={city} onChange={(e) => setCity(e.target.value)} />
           </Field>
           <Field label="Bairro">
-            <Input required value={neighborhood} onChange={(e) => setNeighborhood(e.target.value)} placeholder="Centro Histórico" />
+            <Input
+              required
+              value={neighborhood}
+              onChange={(e) => setNeighborhood(e.target.value)}
+              placeholder="Centro Histórico"
+            />
           </Field>
         </div>
       </Section>
@@ -79,15 +128,27 @@ export function PropertyForm({
       <Section title="Características">
         <div className="grid gap-4 sm:grid-cols-3">
           <Field label="Quartos">
-            <Input type="number" min={0} value={bedrooms} onChange={(e) => setBedrooms(Number(e.target.value))} />
+            <Input
+              type="number"
+              min={0}
+              value={bedrooms}
+              onChange={(e) => setBedrooms(Number(e.target.value))}
+            />
           </Field>
           <Field label="Banheiros">
-            <Input type="number" min={0} value={bathrooms} onChange={(e) => setBathrooms(Number(e.target.value))} />
+            <Input
+              type="number"
+              min={0}
+              value={bathrooms}
+              onChange={(e) => setBathrooms(Number(e.target.value))}
+            />
           </Field>
           <Field label="Garagem">
             <div className="flex items-center gap-3 h-10">
               <Switch checked={garage} onCheckedChange={setGarage} />
-              <span className="text-sm text-muted-foreground">{garage ? "Possui" : "Não possui"}</span>
+              <span className="text-sm text-muted-foreground">
+                {garage ? "Possui" : "Não possui"}
+              </span>
             </div>
           </Field>
         </div>
@@ -99,7 +160,12 @@ export function PropertyForm({
             <Input required value={ownerName} onChange={(e) => setOwnerName(e.target.value)} />
           </Field>
           <Field label="Telefone / WhatsApp">
-            <Input required value={ownerPhone} onChange={(e) => setOwnerPhone(e.target.value)} placeholder="(89) 99999-0000" />
+            <Input
+              required
+              value={ownerPhone}
+              onChange={(e) => setOwnerPhone(e.target.value)}
+              placeholder="(89) 99999-0000"
+            />
           </Field>
         </div>
       </Section>
@@ -107,9 +173,16 @@ export function PropertyForm({
       <Section title="Fotos do imóvel">
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {images.map((src, i) => (
-            <div key={i} className="relative aspect-[4/3] overflow-hidden rounded-md border border-border bg-muted">
+            <div
+              key={i}
+              className="relative aspect-[4/3] overflow-hidden rounded-md border border-border bg-muted"
+            >
               <img src={src} alt="" className="h-full w-full object-cover" />
-              <button type="button" onClick={() => setImages((p) => p.filter((_, idx) => idx !== i))} className="absolute right-1.5 top-1.5 grid h-7 w-7 place-items-center rounded-full bg-background/90 hover:bg-background">
+              <button
+                type="button"
+                onClick={() => setImages((p) => p.filter((_, idx) => idx !== i))}
+                className="absolute right-1.5 top-1.5 grid h-7 w-7 place-items-center rounded-full bg-background/90 hover:bg-background"
+              >
                 <X className="h-3.5 w-3.5" />
               </button>
             </div>
@@ -118,7 +191,13 @@ export function PropertyForm({
             <label className="flex aspect-[4/3] cursor-pointer flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed border-border text-muted-foreground hover:border-primary hover:text-primary transition-colors">
               <Upload className="h-5 w-5" />
               <span className="text-xs">Adicionar foto</span>
-              <input type="file" accept="image/*" multiple className="hidden" onChange={(e) => onFiles(e.target.files)} />
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={(e) => onFiles(e.target.files)}
+              />
             </label>
           )}
         </div>
@@ -126,7 +205,9 @@ export function PropertyForm({
       </Section>
 
       <div className="flex justify-end">
-        <Button type="submit" size="lg">{submitLabel}</Button>
+        <Button type="submit" size="lg">
+          {submitLabel}
+        </Button>
       </div>
     </form>
   );

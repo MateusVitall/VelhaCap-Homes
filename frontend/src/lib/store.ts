@@ -206,13 +206,19 @@ export function loginUser(email: string, password: string): User {
 }
 export function logoutUser() {
   if (!isBrowser) return;
-  localStorage.removeItem(SESSION_KEY);
+
+  localStorage.removeItem("token");
+  localStorage.removeItem("oeiras_session");
+  localStorage.removeItem("oeiras_user");
 }
 export function currentUser(): User | null {
   if (!isBrowser) return null;
-  const id = read<string | null>(SESSION_KEY, null);
-  if (!id) return null;
-  return getUsers().find((u) => u.id === id) ?? null;
+
+  const user = localStorage.getItem("oeiras_user");
+
+  if (!user) return null;
+
+  return JSON.parse(user);
 }
 
 export function formatBRL(n: number) {

@@ -22,14 +22,24 @@ function NewProperty() {
         submitLabel="Publicar imóvel"
         defaultOwnerName={user.name}
         onSubmit={(values) => {
-          saveProperty({
-            ...values,
-            id: crypto.randomUUID(),
-            ownerId: user.id,
-            createdAt: Date.now(),
-          });
-          toast.success("Imóvel publicado com sucesso!");
-          navigate({ to: "/painel/imoveis" });
+          try {
+            console.log("ANTES SAVE");
+
+            saveProperty({
+              ...values,
+             id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+              ownerId: user.id,
+              createdAt: Date.now(),
+            });
+
+            console.log("DEPOIS SAVE");
+
+            toast.success("Imóvel publicado com sucesso!");
+
+            navigate({ to: "/painel/imoveis" });
+          } catch (error) {
+            console.error("ERRO NO SAVE:", error);
+          }
         }}
       />
     </div>

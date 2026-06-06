@@ -13,6 +13,10 @@ export const Route = createFileRoute("/painel")({
 
 function DashboardLayout() {
   const { user, ready } = useAuth();
+
+  console.log("PAINEL USER:", user);
+  console.log("PAINEL READY:", ready);
+
   const navigate = useNavigate();
   const path = useRouterState({ select: (s) => s.location.pathname });
 
@@ -32,7 +36,11 @@ function DashboardLayout() {
     { to: "/painel/novo", label: "Cadastrar imóvel", icon: ListPlus, exact: false },
   ] as const;
 
-  const onLogout = () => { logoutUser(); emitAuthChange(); navigate({ to: "/" }); };
+  const onLogout = () => {
+    logoutUser();
+    emitAuthChange();
+    navigate({ to: "/" });
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -40,7 +48,9 @@ function DashboardLayout() {
       <div className="mx-auto max-w-7xl w-full px-4 sm:px-6 py-8 flex-1 grid gap-8 lg:grid-cols-[240px_1fr]">
         <aside className="lg:sticky lg:top-24 lg:self-start">
           <div className="rounded-xl bg-sidebar text-sidebar-foreground p-5">
-            <div className="text-xs uppercase tracking-[0.2em] text-sidebar-foreground/60">Conectado como</div>
+            <div className="text-xs uppercase tracking-[0.2em] text-sidebar-foreground/60">
+              Conectado como
+            </div>
             <div className="mt-1 font-display text-xl truncate">{user.name}</div>
             <div className="text-xs text-sidebar-foreground/60 truncate">{user.email}</div>
 
@@ -65,10 +75,16 @@ function DashboardLayout() {
             </nav>
 
             <div className="mt-6 pt-5 border-t border-sidebar-border space-y-1">
-              <Link to="/" className="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm text-sidebar-foreground/80 hover:bg-sidebar-accent">
+              <Link
+                to="/"
+                className="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm text-sidebar-foreground/80 hover:bg-sidebar-accent"
+              >
                 <Home className="h-4 w-4" /> Voltar ao site
               </Link>
-              <button onClick={onLogout} className="w-full flex items-center gap-2.5 rounded-md px-3 py-2 text-sm text-sidebar-foreground/80 hover:bg-sidebar-accent">
+              <button
+                onClick={onLogout}
+                className="w-full flex items-center gap-2.5 rounded-md px-3 py-2 text-sm text-sidebar-foreground/80 hover:bg-sidebar-accent"
+              >
                 <LogOut className="h-4 w-4" /> Sair
               </button>
             </div>

@@ -7,11 +7,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 export class AuthController {
-
   async login(req: Request, res: Response) {
-
     try {
-
       const { email, password } = req.body;
 
       const user = await prisma.user.findUnique({
@@ -26,10 +23,7 @@ export class AuthController {
         });
       }
 
-      const passwordMatch = await bcrypt.compare(
-        password,
-        user.password
-      );
+      const passwordMatch = await bcrypt.compare(password, user.password);
 
       if (!passwordMatch) {
         return res.status(401).json({
@@ -44,15 +38,18 @@ export class AuthController {
         process.env.JWT_SECRET!,
         {
           expiresIn: "7d",
-        }
+        },
       );
 
       return res.json({
         token,
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+        },
       });
-
     } catch (error) {
-
       return res.status(500).json({
         error: "Erro ao fazer login",
       });
