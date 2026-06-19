@@ -4,7 +4,6 @@ import { Home, LayoutDashboard, ListPlus, LogOut, Building } from "lucide-react"
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { useAuth, emitAuthChange } from "@/hooks/use-auth";
-import { logoutUser } from "@/lib/store";
 
 export const Route = createFileRoute("/painel")({
   head: () => ({ meta: [{ title: "Meu painel — CasaOeiras" }] }),
@@ -37,8 +36,11 @@ function DashboardLayout() {
   ] as const;
 
   const onLogout = () => {
-    logoutUser();
+    localStorage.removeItem("token");
+    localStorage.removeItem("oeiras_user");
+
     emitAuthChange();
+
     navigate({ to: "/" });
   };
 

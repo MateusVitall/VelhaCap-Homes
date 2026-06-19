@@ -34,8 +34,14 @@ model Imovel {
   quartos     Int
   banheiros   Int
   garagem     Boolean
+
+  ownerName   String?
+  ownerPhone  String?
+
+  imagens     String[]
+
   createdAt   DateTime @default(now())
 
-  userId String?
-  user   User? @relation(fields: [userId], references: [id])
+  userId      String?
+  user        User? @relation(fields: [userId], references: [id])
 }

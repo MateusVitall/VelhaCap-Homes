@@ -1,7 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/use-auth";
 import { PropertyForm } from "@/components/PropertyForm";
-import { saveProperty } from "@/lib/store";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/painel/novo")({
@@ -21,24 +20,45 @@ function NewProperty() {
       <PropertyForm
         submitLabel="Publicar imóvel"
         defaultOwnerName={user.name}
-        onSubmit={(values) => {
+        onSubmit={async (values) => {
           try {
-            console.log("ANTES SAVE");
+            const token = localStorage.getItem("token");
 
-            saveProperty({
-              ...values,
-             id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-              ownerId: user.id,
-              createdAt: Date.now(),
+            const response = await fetch("http://localhost:3000/imoveis", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                titulo: values.title,
+                descricao: values.description,
+                preco: values.price,
+                cidade: values.city,
+                bairro: values.neighborhood,
+                quartos: values.bedrooms,
+                banheiros: values.bathrooms,
+                garagem: values.garage,
+
+                ownerName: values.ownerName,
+                ownerPhone: values.ownerPhone,
+                imagens: values.images,
+              }),
             });
 
-            console.log("DEPOIS SAVE");
+            const data = await response.json();
+
+            if (!response.ok) {
+              console.log(data);
+              throw new Error("Erro ao publicar imóvel");
+            }
 
             toast.success("Imóvel publicado com sucesso!");
 
             navigate({ to: "/painel/imoveis" });
           } catch (error) {
-            console.error("ERRO NO SAVE:", error);
+            console.error(error);
+            toast.error("Erro ao publicar imóvel");
           }
         }}
       />

@@ -15,6 +15,7 @@ import { Route as EntrarRouteImport } from './routes/entrar'
 import { Route as CadastroRouteImport } from './routes/cadastro'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PainelIndexRouteImport } from './routes/painel.index'
+import { Route as ImoveisIndexRouteImport } from './routes/imoveis.index'
 import { Route as PainelNovoRouteImport } from './routes/painel.novo'
 import { Route as PainelImoveisRouteImport } from './routes/painel.imoveis'
 import { Route as ImoveisIdRouteImport } from './routes/imoveis.$id'
@@ -50,6 +51,11 @@ const PainelIndexRoute = PainelIndexRouteImport.update({
   path: '/',
   getParentRoute: () => PainelRoute,
 } as any)
+const ImoveisIndexRoute = ImoveisIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ImoveisRoute,
+} as any)
 const PainelNovoRoute = PainelNovoRouteImport.update({
   id: '/novo',
   path: '/novo',
@@ -80,6 +86,7 @@ export interface FileRoutesByFullPath {
   '/imoveis/$id': typeof ImoveisIdRoute
   '/painel/imoveis': typeof PainelImoveisRoute
   '/painel/novo': typeof PainelNovoRoute
+  '/imoveis/': typeof ImoveisIndexRoute
   '/painel/': typeof PainelIndexRoute
   '/painel/editar/$id': typeof PainelEditarIdRoute
 }
@@ -87,10 +94,10 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cadastro': typeof CadastroRoute
   '/entrar': typeof EntrarRoute
-  '/imoveis': typeof ImoveisRouteWithChildren
   '/imoveis/$id': typeof ImoveisIdRoute
   '/painel/imoveis': typeof PainelImoveisRoute
   '/painel/novo': typeof PainelNovoRoute
+  '/imoveis': typeof ImoveisIndexRoute
   '/painel': typeof PainelIndexRoute
   '/painel/editar/$id': typeof PainelEditarIdRoute
 }
@@ -104,6 +111,7 @@ export interface FileRoutesById {
   '/imoveis/$id': typeof ImoveisIdRoute
   '/painel/imoveis': typeof PainelImoveisRoute
   '/painel/novo': typeof PainelNovoRoute
+  '/imoveis/': typeof ImoveisIndexRoute
   '/painel/': typeof PainelIndexRoute
   '/painel/editar/$id': typeof PainelEditarIdRoute
 }
@@ -118,6 +126,7 @@ export interface FileRouteTypes {
     | '/imoveis/$id'
     | '/painel/imoveis'
     | '/painel/novo'
+    | '/imoveis/'
     | '/painel/'
     | '/painel/editar/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -125,10 +134,10 @@ export interface FileRouteTypes {
     | '/'
     | '/cadastro'
     | '/entrar'
-    | '/imoveis'
     | '/imoveis/$id'
     | '/painel/imoveis'
     | '/painel/novo'
+    | '/imoveis'
     | '/painel'
     | '/painel/editar/$id'
   id:
@@ -141,6 +150,7 @@ export interface FileRouteTypes {
     | '/imoveis/$id'
     | '/painel/imoveis'
     | '/painel/novo'
+    | '/imoveis/'
     | '/painel/'
     | '/painel/editar/$id'
   fileRoutesById: FileRoutesById
@@ -197,6 +207,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PainelIndexRouteImport
       parentRoute: typeof PainelRoute
     }
+    '/imoveis/': {
+      id: '/imoveis/'
+      path: '/'
+      fullPath: '/imoveis/'
+      preLoaderRoute: typeof ImoveisIndexRouteImport
+      parentRoute: typeof ImoveisRoute
+    }
     '/painel/novo': {
       id: '/painel/novo'
       path: '/novo'
@@ -230,10 +247,12 @@ declare module '@tanstack/react-router' {
 
 interface ImoveisRouteChildren {
   ImoveisIdRoute: typeof ImoveisIdRoute
+  ImoveisIndexRoute: typeof ImoveisIndexRoute
 }
 
 const ImoveisRouteChildren: ImoveisRouteChildren = {
   ImoveisIdRoute: ImoveisIdRoute,
+  ImoveisIndexRoute: ImoveisIndexRoute,
 }
 
 const ImoveisRouteWithChildren =

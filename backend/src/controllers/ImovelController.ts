@@ -9,13 +9,19 @@ import { ZodError } from "zod";
 export class ImovelController {
   async create(req: Request, res: Response) {
     try {
-      console.log("User logado:", req.userId);
-
       const data = createImovelSchema.parse(req.body);
+
+      const usuario = await prisma.user.findUnique({
+        where: {
+          id: req.userId,
+        },
+      });
 
       const imovel = await prisma.imovel.create({
         data: {
           ...data,
+          ownerName: usuario?.name,
+          ownerPhone: usuario?.telefone,
           userId: req.userId,
         },
       });
@@ -38,10 +44,19 @@ export class ImovelController {
 
   async list(req: Request, res: Response) {
     try {
-      const imoveis = await prisma.imovel.findMany();
+      const imoveis = await prisma.imovel.findMany({
+        include: {
+          user: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
 
       return res.json(imoveis);
     } catch (error) {
+      console.log(error);
+
       return res.status(500).json({
         error: "Erro ao listar imóveis",
       });
@@ -54,6 +69,9 @@ export class ImovelController {
 
       const imovel = await prisma.imovel.findUnique({
         where: { id },
+        include: {
+          user: true,
+        },
       });
 
       if (!imovel) {
@@ -64,11 +82,14 @@ export class ImovelController {
 
       return res.json(imovel);
     } catch (error) {
+      console.log(error);
+
       return res.status(500).json({
         error: "Erro ao buscar imóvel",
       });
     }
   }
+
   async delete(req: Request, res: Response) {
     try {
       const id = String(req.params.id);
@@ -95,6 +116,8 @@ export class ImovelController {
 
       return res.status(204).send();
     } catch (error) {
+      console.log(error);
+
       return res.status(500).json({
         error: "Erro ao excluir imóvel",
       });
@@ -126,10 +149,15 @@ export class ImovelController {
       const imovel = await prisma.imovel.update({
         where: { id },
         data,
+        include: {
+          user: true,
+        },
       });
 
       return res.json(imovel);
     } catch (error) {
+      console.log(error);
+
       if (error instanceof ZodError) {
         return res.status(400).json({
           errors: error.flatten().fieldErrors,
@@ -148,10 +176,18 @@ export class ImovelController {
         where: {
           userId: req.userId,
         },
+        include: {
+          user: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
       });
 
       return res.json(imoveis);
     } catch (error) {
+      console.log(error);
+
       return res.status(500).json({
         error: "Erro ao listar seus imóveis",
       });

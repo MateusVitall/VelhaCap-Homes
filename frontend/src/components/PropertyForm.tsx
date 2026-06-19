@@ -5,9 +5,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import type { Property } from "@/lib/store";
 
-export type PropertyFormValues = Omit<Property, "id" | "ownerId" | "createdAt">;
+export type PropertyFormValues = {
+  title: string;
+  description: string;
+  price: number;
+  city: string;
+  neighborhood: string;
+  bedrooms: number;
+  bathrooms: number;
+  garage: boolean;
+  images: string[];
+  ownerName: string;
+  ownerPhone: string;
+};
 
 export function PropertyForm({
   initial,
