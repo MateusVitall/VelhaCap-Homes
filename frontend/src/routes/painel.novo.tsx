@@ -36,6 +36,7 @@ function NewProperty() {
                 preco: values.price,
                 cidade: values.city,
                 bairro: values.neighborhood,
+                tipo: values.tipo,
                 quartos: values.bedrooms,
                 banheiros: values.bathrooms,
                 garagem: values.garage,

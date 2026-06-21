@@ -7,9 +7,11 @@ type Property = {
   preco: number;
   cidade: string;
   bairro: string;
+  tipo: string;
   quartos: number;
   banheiros: number;
   garagem: boolean;
+  disponivel?: boolean;
   imagens: string[];
 };
 
@@ -21,11 +23,15 @@ function formatBRL(valor?: number) {
 }
 
 export function PropertyCard({ property }: { property: Property }) {
+  const isUnavailable = property.disponivel === false;
+
   return (
     <Link
       to="/imoveis/$id"
       params={{ id: String(property.id) }}
-      className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-all hover:shadow-lg hover:-translate-y-0.5"
+      className={`group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-all hover:shadow-lg hover:-translate-y-0.5 ${
+        isUnavailable ? "opacity-60 pointer-events-none" : ""
+      }`}
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-muted">
         <img
@@ -35,9 +41,20 @@ export function PropertyCard({ property }: { property: Property }) {
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
 
-        <div className="absolute left-3 top-3 rounded-full bg-background/95 px-3 py-1 text-xs font-medium shadow-sm">
-          {property.bairro}
+        <div className="absolute left-3 top-3 flex gap-2">
+          <span className="rounded-full bg-background/95 px-3 py-1 text-xs font-medium shadow-sm">
+            {property.tipo}
+          </span>
+          <span className="rounded-full bg-background/95 px-3 py-1 text-xs font-medium shadow-sm">
+            {property.bairro}
+          </span>
         </div>
+
+        {isUnavailable && (
+          <span className="absolute right-3 top-3 rounded-full bg-destructive/90 px-3 py-1 text-xs font-medium text-destructive-foreground shadow-sm">
+            Indisponível
+          </span>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col p-5">

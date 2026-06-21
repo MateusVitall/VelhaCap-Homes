@@ -38,9 +38,11 @@ type Property = {
   preco: number;
   cidade: string;
   bairro: string;
+  tipo: string;
   quartos: number;
   banheiros: number;
   garagem: boolean;
+  disponivel?: boolean;
   imagens?: string[];
   ownerName?: string;
   ownerPhone?: string;
@@ -177,6 +179,7 @@ function HomePage() {
                   preco: p.preco,
                   cidade: p.cidade,
                   bairro: p.bairro,
+                  tipo: p.tipo ?? "Casa",
                   quartos: p.quartos,
                   banheiros: p.banheiros,
                   garagem: p.garagem,

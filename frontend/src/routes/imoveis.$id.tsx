@@ -17,6 +17,7 @@ type Property = {
   preco: number;
   cidade: string;
   bairro: string;
+  tipo: string;
   quartos: number;
   banheiros: number;
   garagem: boolean;
@@ -122,7 +123,7 @@ function PropertyDetail() {
       <section className="mx-auto max-w-7xl px-4 sm:px-6 py-10 grid gap-10 lg:grid-cols-[1fr_360px]">
         <div>
           <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-            {property.bairro} · {property.cidade}
+            {property.tipo} · {property.bairro} · {property.cidade}
           </div>
 
           <h1 className="mt-2 font-display text-4xl md:text-5xl leading-tight">

@@ -1,10 +1,11 @@
 import { useState, type ReactNode } from "react";
-import { Upload, X } from "lucide-react";
+import { Upload, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { uploadImage } from "@/lib/api";
 
 export type PropertyFormValues = {
   title: string;
@@ -12,6 +13,7 @@ export type PropertyFormValues = {
   price: number;
   city: string;
   neighborhood: string;
+  tipo: string;
   bedrooms: number;
   bathrooms: number;
   garage: boolean;
@@ -36,25 +38,30 @@ export function PropertyForm({
   const [price, setPrice] = useState<number | "">(initial?.price ?? "");
   const [city, setCity] = useState(initial?.city ?? "Oeiras");
   const [neighborhood, setNeighborhood] = useState(initial?.neighborhood ?? "");
+  const [tipo, setTipo] = useState(initial?.tipo ?? "Casa");
   const [bedrooms, setBedrooms] = useState<number>(initial?.bedrooms ?? 1);
   const [bathrooms, setBathrooms] = useState<number>(initial?.bathrooms ?? 1);
   const [garage, setGarage] = useState<boolean>(initial?.garage ?? false);
   const [ownerName, setOwnerName] = useState(initial?.ownerName ?? defaultOwnerName);
   const [ownerPhone, setOwnerPhone] = useState(initial?.ownerPhone ?? "");
   const [images, setImages] = useState<string[]>(initial?.images ?? []);
+  const [uploading, setUploading] = useState(false);
 
-  const onFiles = (files: FileList | null) => {
+  const onFiles = async (files: FileList | null) => {
     if (!files) return;
-    Array.from(files)
-      .slice(0, 6 - images.length)
-      .forEach((f) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const result = reader.result;
-          if (typeof result === "string") setImages((prev) => [...prev, result]);
-        };
-        reader.readAsDataURL(f);
-      });
+    const toUpload = Array.from(files).slice(0, 6 - images.length);
+    if (toUpload.length === 0) return;
+
+    setUploading(true);
+    for (const file of toUpload) {
+      try {
+        const url = await uploadImage(file);
+        setImages((prev) => [...prev, url]);
+      } catch (err) {
+        console.error("Erro ao enviar imagem:", err);
+      }
+    }
+    setUploading(false);
   };
 
   const submit = (e: React.FormEvent) => {
@@ -82,6 +89,7 @@ export function PropertyForm({
       price: Number(price),
       city,
       neighborhood,
+      tipo,
       bedrooms,
       bathrooms,
       garage,
@@ -137,6 +145,19 @@ export function PropertyForm({
       </Section>
 
       <Section title="Características">
+        <Field label="Tipo do imóvel">
+          <select
+            value={tipo}
+            onChange={(e) => setTipo(e.target.value)}
+            className="flex h-10 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+          >
+            <option value="Casa">Casa</option>
+            <option value="Apartamento">Apartamento</option>
+            <option value="Kitnet">Kitnet</option>
+            <option value="Sobrado">Sobrado</option>
+            <option value="Sala Comercial">Sala Comercial</option>
+          </select>
+        </Field>
         <div className="grid gap-4 sm:grid-cols-3">
           <Field label="Quartos">
             <Input
@@ -200,14 +221,19 @@ export function PropertyForm({
           ))}
           {images.length < 6 && (
             <label className="flex aspect-[4/3] cursor-pointer flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed border-border text-muted-foreground hover:border-primary hover:text-primary transition-colors">
-              <Upload className="h-5 w-5" />
-              <span className="text-xs">Adicionar foto</span>
+              {uploading ? (
+                <Loader2 className="h-5 w-5 animate-spin" />
+              ) : (
+                <Upload className="h-5 w-5" />
+              )}
+              <span className="text-xs">{uploading ? "Enviando..." : "Adicionar foto"}</span>
               <input
                 type="file"
                 accept="image/*"
                 multiple
                 className="hidden"
                 onChange={(e) => onFiles(e.target.files)}
+                disabled={uploading}
               />
             </label>
           )}

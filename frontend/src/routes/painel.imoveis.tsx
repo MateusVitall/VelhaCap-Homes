@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Edit, Trash2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/painel/imoveis")({
@@ -13,8 +14,10 @@ type Imovel = {
   titulo: string;
   preco: number;
   bairro: string;
+  tipo: string;
   quartos: number;
   banheiros: number;
+  disponivel: boolean;
   imagens: string[];
 };
 
@@ -80,6 +83,35 @@ function MyProperties() {
     }
   }
 
+  async function onToggle(id: string, current: boolean) {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch(`http://localhost:3000/imoveis/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ disponivel: !current }),
+      });
+
+      if (!response.ok) {
+        throw new Error();
+      }
+
+      setImoveis((prev) =>
+        prev.map((item) =>
+          item.id === id ? { ...item, disponivel: !current } : item
+        )
+      );
+
+      toast.success(!current ? "Imóvel disponibilizado" : "Imóvel indisibilizado");
+    } catch {
+      toast.error("Erro ao alterar status");
+    }
+  }
+
   if (loading) {
     return <div>Carregando...</div>;
   }
@@ -107,45 +139,69 @@ function MyProperties() {
       ) : (
         <div className="mt-8 grid gap-4">
           {imoveis.map((p) => (
-            <div key={p.id} className="overflow-hidden rounded-xl border border-border bg-card">
-              <img
-                src={
-                  p.imagens?.length > 0
-                    ? p.imagens[0]
-                    : "https://placehold.co/800x600?text=Sem+Imagem"
-                }
-                alt={p.titulo}
-                className="h-56 w-full object-cover"
-              />
+            <div
+              key={p.id}
+              className={`overflow-hidden rounded-xl border border-border bg-card ${
+                !p.disponivel ? "opacity-60" : ""
+              }`}
+            >
+              <div className="relative">
+                <img
+                  src={
+                    p.imagens?.length > 0
+                      ? p.imagens[0]
+                      : "https://placehold.co/800x600?text=Sem+Imagem"
+                  }
+                  alt={p.titulo}
+                  className="h-56 w-full object-cover"
+                />
+                {!p.disponivel && (
+                  <span className="absolute right-3 top-3 rounded-full bg-destructive/90 px-3 py-1 text-xs font-medium text-destructive-foreground">
+                    Indisponível
+                  </span>
+                )}
+              </div>
 
               <div className="p-4">
                 <h3 className="font-display text-xl">{p.titulo}</h3>
 
                 <div className="text-sm text-muted-foreground">
-                  {p.bairro} · {p.quartos} quartos · {p.banheiros} banheiros
+                  {p.tipo} · {p.bairro} · {p.quartos} quartos · {p.banheiros} banheiros
                 </div>
 
                 <div className="mt-2 font-display text-xl text-primary">{formatBRL(p.preco)}</div>
 
-                <div className="mt-4 flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() =>
-                      navigate({
-                        to: "/painel/editar/$id",
-                        params: { id: p.id },
-                      })
-                    }
-                  >
-                    <Edit className="mr-1 h-4 w-4" />
-                    Editar
-                  </Button>
+                <div className="mt-4 flex items-center gap-3">
+                  <div className="flex items-center gap-2">
+                    <Switch
+                      checked={p.disponivel}
+                      onCheckedChange={() => onToggle(p.id, p.disponivel)}
+                    />
+                    <span className="text-sm text-muted-foreground">
+                      {p.disponivel ? "Disponível" : "Indisponível"}
+                    </span>
+                  </div>
 
-                  <Button variant="outline" size="sm" onClick={() => onDelete(p.id)}>
-                    <Trash2 className="mr-1 h-4 w-4" />
-                    Excluir
-                  </Button>
+                  <div className="ml-auto flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() =>
+                        navigate({
+                          to: "/painel/editar/$id",
+                          params: { id: p.id },
+                        })
+                      }
+                    >
+                      <Edit className="mr-1 h-4 w-4" />
+                      Editar
+                    </Button>
+
+                    <Button variant="outline" size="sm" onClick={() => onDelete(p.id)}>
+                      <Trash2 className="mr-1 h-4 w-4" />
+                      Excluir
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>

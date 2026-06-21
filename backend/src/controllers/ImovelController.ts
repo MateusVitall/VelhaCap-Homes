@@ -5,6 +5,7 @@ import {
   updateImovelSchema,
 } from "../schemas/imovel.schema";
 import { ZodError } from "zod";
+import { deleteUploadedImage } from "../lib/deleteFile";
 
 export class ImovelController {
   async create(req: Request, res: Response) {
@@ -45,6 +46,9 @@ export class ImovelController {
   async list(req: Request, res: Response) {
     try {
       const imoveis = await prisma.imovel.findMany({
+        where: {
+          disponivel: true,
+        },
         include: {
           user: true,
         },
@@ -110,6 +114,8 @@ export class ImovelController {
         });
       }
 
+      imovel.imagens.forEach(deleteUploadedImage);
+
       await prisma.imovel.delete({
         where: { id },
       });
@@ -128,7 +134,15 @@ export class ImovelController {
     try {
       const id = String(req.params.id);
 
-      const data = updateImovelSchema.parse(req.body);
+      const parsed = updateImovelSchema.parse(req.body);
+
+      const data = Object.fromEntries(
+        Object.entries(parsed).filter(([_, v]) => v !== undefined)
+      );
+
+      if (Object.keys(data).length === 0) {
+        return res.status(400).json({ error: "Nenhum dado enviado" });
+      }
 
       const imovelExistente = await prisma.imovel.findUnique({
         where: { id },
@@ -144,6 +158,13 @@ export class ImovelController {
         return res.status(403).json({
           error: "Acesso negado",
         });
+      }
+
+      if (data.imagens) {
+        const imagensRemovidas = imovelExistente.imagens.filter(
+          (url) => !(data.imagens as string[]).includes(url)
+        );
+        imagensRemovidas.forEach(deleteUploadedImage);
       }
 
       const imovel = await prisma.imovel.update({

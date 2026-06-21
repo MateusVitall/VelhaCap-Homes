@@ -17,9 +17,12 @@ type Property = {
   preco: number;
   cidade: string;
   bairro: string;
+  tipo: string;
   quartos: number;
   banheiros: number;
   garagem: boolean;
+  disponivel?: boolean;
+  imagens?: string[];
 };
 
 export const Route = createFileRoute("/imoveis/")({
@@ -33,6 +36,7 @@ function ListingPage() {
   const { q: initialQ } = Route.useSearch();
 
   const [q, setQ] = useState(initialQ ?? "");
+  const [tipoFilter, setTipoFilter] = useState("");
   const [minRooms, setMinRooms] = useState(0);
   const [maxPrice, setMaxPrice] = useState<number | "">("");
 
@@ -65,6 +69,10 @@ function ListingPage() {
         }
       }
 
+      if (tipoFilter && p.tipo !== tipoFilter) {
+        return false;
+      }
+
       if (p.quartos < minRooms) {
         return false;
       }
@@ -75,7 +83,7 @@ function ListingPage() {
 
       return true;
     });
-  }, [properties, q, minRooms, maxPrice]);
+  }, [properties, q, tipoFilter, minRooms, maxPrice]);
 
   console.log("Primeiro imóvel:", filteredProperties[0]);
   return (
@@ -86,17 +94,30 @@ function ListingPage() {
 
           <h1 className="font-display text-4xl md:text-5xl mt-2">Imóveis disponíveis em Oeiras</h1>
 
-          <div className="mt-7 grid gap-3 md:grid-cols-[1fr_auto_auto_auto]">
+          <div className="mt-7 grid gap-3 md:grid-cols-[1fr_auto_auto_auto_auto]">
             <div className="flex items-center gap-2 rounded-md border border-border bg-background px-3">
               <Search className="h-4 w-4 text-muted-foreground" />
 
               <Input
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
-                placeholder="Bairro, tipo, palavra-chave..."
+                placeholder="Bairro, palavra-chave..."
                 className="border-0 shadow-none focus-visible:ring-0 px-0"
               />
             </div>
+
+            <select
+              value={tipoFilter}
+              onChange={(e) => setTipoFilter(e.target.value)}
+              className="rounded-md border border-border bg-background px-3 py-2 text-sm"
+            >
+              <option value="">Tipo: todos</option>
+              <option value="Casa">Casa</option>
+              <option value="Apartamento">Apartamento</option>
+              <option value="Kitnet">Kitnet</option>
+              <option value="Sobrado">Sobrado</option>
+              <option value="Sala Comercial">Sala Comercial</option>
+            </select>
 
             <select
               value={minRooms}
@@ -123,6 +144,7 @@ function ListingPage() {
               className="gap-2"
               onClick={() => {
                 setQ("");
+                setTipoFilter("");
                 setMinRooms(0);
                 setMaxPrice("");
               }}
@@ -154,6 +176,7 @@ function ListingPage() {
                     preco: p.preco,
                     cidade: p.cidade,
                     bairro: p.bairro,
+                    tipo: p.tipo ?? "Casa",
                     quartos: p.quartos,
                     banheiros: p.banheiros,
                     garagem: p.garagem,

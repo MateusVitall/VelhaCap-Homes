@@ -39,6 +39,28 @@ export async function getMeusImoveis() {
   return response.json();
 }
 
+export async function uploadImage(file: File): Promise<string> {
+  const token = localStorage.getItem("token");
+
+  const formData = new FormData();
+  formData.append("imagem", file);
+
+  const response = await fetch(`${API_URL}/upload`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Erro ao enviar imagem");
+  }
+
+  const data = await response.json();
+  return data.url;
+}
+
 export async function deleteImovel(id: string) {
   const token = localStorage.getItem("token");
 

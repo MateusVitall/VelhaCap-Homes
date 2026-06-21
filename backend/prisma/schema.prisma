@@ -31,9 +31,11 @@ model Imovel {
   preco       Float
   cidade      String
   bairro      String
+  tipo        String   @default("Casa")
   quartos     Int
   banheiros   Int
   garagem     Boolean
+  disponivel  Boolean  @default(true)
 
   ownerName   String?
   ownerPhone  String?
