@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Home, Instagram, Mail, MapPin, Phone } from "lucide-react";
+import { Home } from "lucide-react";
 
 export function Footer() {
   return (
@@ -28,25 +28,13 @@ export function Footer() {
           </ul>
         </div>
 
-        <div>
-          <h4 className="font-display text-lg mb-3">Contato</h4>
-          <ul className="space-y-2 text-sm text-muted-foreground">
-            <li className="flex gap-2"><MapPin className="h-4 w-4 mt-0.5" /> Oeiras, Piauí — Brasil</li>
-            <li className="flex gap-2"><Phone className="h-4 w-4 mt-0.5" /> (89) 3462-0000</li>
-            <li className="flex gap-2"><Mail className="h-4 w-4 mt-0.5" /> contato@casaoeiras.com.br</li>
-          </ul>
-        </div>
+        <div />
 
         <div>
           <h4 className="font-display text-lg mb-3">Sobre</h4>
           <p className="text-sm text-muted-foreground leading-relaxed">
             Anuncie gratuitamente e alcance milhares de famílias buscando uma nova casa em Oeiras.
           </p>
-          <div className="mt-4 flex gap-3">
-            <a href="#" className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border hover:bg-background transition-colors">
-              <Instagram className="h-4 w-4" />
-            </a>
-          </div>
         </div>
       </div>
       <div className="border-t border-border">

@@ -4,6 +4,7 @@ import { PropertyForm } from "@/components/PropertyForm";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/painel/novo")({
+  head: () => ({ meta: [{ title: "Novo Imóvel — CasaOeiras" }] }),
   component: NewProperty,
 });
 

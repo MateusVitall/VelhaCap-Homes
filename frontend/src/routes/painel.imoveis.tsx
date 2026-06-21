@@ -6,6 +6,7 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/painel/imoveis")({
+  head: () => ({ meta: [{ title: "Meus Imóveis — CasaOeiras" }] }),
   component: MyProperties,
 });
 

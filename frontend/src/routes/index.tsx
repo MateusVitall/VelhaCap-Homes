@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowRight, Building2, Search, ShieldCheck, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/hooks/use-auth";
 
 import { SiteLayout } from "@/components/SiteLayout";
 import { PropertyCard } from "@/components/PropertyCard";
@@ -50,6 +51,7 @@ type Property = {
 
 function HomePage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [q, setQ] = useState("");
   const [properties, setProperties] = useState<Property[]>([]);
@@ -139,11 +141,6 @@ function HomePage() {
             </Button>
           </form>
 
-          <div className="mt-10 flex flex-wrap gap-6 text-sm">
-            <Stat n="120+" label="Imóveis ativos" />
-            <Stat n="14" label="Bairros cobertos" />
-            <Stat n="100%" label="Contato direto" />
-          </div>
         </div>
       </section>
 
@@ -222,7 +219,7 @@ function HomePage() {
           </div>
 
           <div className="mt-12 flex justify-center">
-            <Link to="/cadastro">
+            <Link to={user ? "/painel/novo" : "/cadastro"}>
               <Button size="lg" className="gap-2">
                 Anunciar meu imóvel
                 <ArrowRight className="h-4 w-4" />
@@ -232,15 +229,6 @@ function HomePage() {
         </div>
       </section>
     </SiteLayout>
-  );
-}
-
-function Stat({ n, label }: { n: string; label: string }) {
-  return (
-    <div>
-      <div className="font-display text-3xl">{n}</div>
-      <div className="text-xs uppercase tracking-wider text-primary-foreground/70">{label}</div>
-    </div>
   );
 }
 

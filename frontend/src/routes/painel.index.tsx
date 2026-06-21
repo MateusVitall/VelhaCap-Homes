@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/painel/")({
+  head: () => ({ meta: [{ title: "Painel — CasaOeiras" }] }),
   component: DashboardHome,
 });
 
