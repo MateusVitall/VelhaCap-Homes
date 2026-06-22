@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Building, ListPlus, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { API_URL } from "@/lib/config";
 import { useAuth } from "@/hooks/use-auth";
 import { useEffect, useState } from "react";
 
@@ -19,7 +20,7 @@ function DashboardHome() {
       try {
         const token = localStorage.getItem("token");
 
-        const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/imoveis/meus-imoveis`, {
+        const response = await fetch(`${API_URL}/imoveis/meus-imoveis`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

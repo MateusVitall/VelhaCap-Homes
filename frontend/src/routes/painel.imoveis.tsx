@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Edit, Trash2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { API_URL } from "@/lib/config";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/painel/imoveis")({
@@ -39,7 +40,7 @@ function MyProperties() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/imoveis/meus-imoveis`, {
+      const response = await fetch(`${API_URL}/imoveis/meus-imoveis`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -65,7 +66,7 @@ function MyProperties() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/imoveis/${id}`, {
+      const response = await fetch(`${API_URL}/imoveis/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -88,7 +89,7 @@ function MyProperties() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/imoveis/${id}`, {
+      const response = await fetch(`${API_URL}/imoveis/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

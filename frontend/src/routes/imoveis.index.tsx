@@ -4,6 +4,7 @@ import { Search, SlidersHorizontal } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { PropertyCard } from "@/components/PropertyCard";
 import { Input } from "@/components/ui/input";
+import { API_URL } from "@/lib/config";
 import { Button } from "@/components/ui/button";
 
 type SearchParams = {
@@ -47,7 +48,7 @@ function ListingPage() {
   useEffect(() => {
     async function loadProperties() {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/imoveis`);
+        const response = await fetch(`${API_URL}/imoveis`);
         const data = await response.json();
         setProperties(data);
       } catch (error) {

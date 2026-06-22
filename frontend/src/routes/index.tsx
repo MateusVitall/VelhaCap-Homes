@@ -8,6 +8,7 @@ import { PropertyCard } from "@/components/PropertyCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+import { API_URL } from "@/lib/config";
 import heroImg from "@/assets/hero-oeiras.jpg";
 
 export const Route = createFileRoute("/")({
@@ -60,7 +61,7 @@ function HomePage() {
   useEffect(() => {
     async function loadProperties() {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/imoveis`);
+        const response = await fetch(`${API_URL}/imoveis`);
 
         if (!response.ok) {
           throw new Error("Erro ao carregar imóveis");

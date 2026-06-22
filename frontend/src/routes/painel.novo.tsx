@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/use-auth";
+import { API_URL } from "@/lib/config";
 import { PropertyForm } from "@/components/PropertyForm";
 import { toast } from "sonner";
 
@@ -25,7 +26,7 @@ function NewProperty() {
           try {
             const token = localStorage.getItem("token");
 
-            const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/imoveis`, {
+            const response = await fetch(`${API_URL}/imoveis`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",

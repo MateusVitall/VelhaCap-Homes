@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { API_URL } from "@/lib/config";
 
 export const Route = createFileRoute("/entrar")({
   head: () => ({ meta: [{ title: "Entrar — CasaOeiras" }] }),
@@ -24,7 +25,7 @@ function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/login`, {
+      const response = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

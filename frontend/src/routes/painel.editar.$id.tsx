@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
+import { API_URL } from "@/lib/config";
 import { PropertyForm } from "@/components/PropertyForm";
 import { toast } from "sonner";
 
@@ -21,7 +22,7 @@ function EditProperty() {
   useEffect(() => {
     async function loadProperty() {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/imoveis/${id}`);
+        const response = await fetch(`${API_URL}/imoveis/${id}`);
 
         if (!response.ok) {
           throw new Error();
@@ -85,7 +86,7 @@ function EditProperty() {
               preco: values.price,
             });
 
-            const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/imoveis/${id}`, {
+            const response = await fetch(`${API_URL}/imoveis/${id}`, {
               method: "PUT",
               headers: {
                 "Content-Type": "application/json",

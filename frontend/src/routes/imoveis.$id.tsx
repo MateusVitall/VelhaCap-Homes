@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowLeft, Bath, BedDouble, Car, Mail, MapPin, Phone, User } from "lucide-react";
 
+import { API_URL } from "@/lib/config";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Button } from "@/components/ui/button";
 import { formatBRL } from "@/lib/utils";
@@ -37,7 +38,7 @@ function PropertyDetail() {
   useEffect(() => {
     async function loadProperty() {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/imoveis/${id}`);
+        const response = await fetch(`${API_URL}/imoveis/${id}`);
 
         if (!response.ok) {
           throw new Error("Imóvel não encontrado");
