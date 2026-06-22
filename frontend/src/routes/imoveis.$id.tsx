@@ -37,7 +37,7 @@ function PropertyDetail() {
   useEffect(() => {
     async function loadProperty() {
       try {
-        const response = await fetch(`http://localhost:3000/imoveis/${id}`);
+        const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/imoveis/${id}`);
 
         if (!response.ok) {
           throw new Error("Imóvel não encontrado");

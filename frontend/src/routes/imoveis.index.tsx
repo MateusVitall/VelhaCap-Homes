@@ -47,7 +47,7 @@ function ListingPage() {
   useEffect(() => {
     async function loadProperties() {
       try {
-        const response = await fetch("http://localhost:3000/imoveis");
+        const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/imoveis`);
         const data = await response.json();
         setProperties(data);
       } catch (error) {

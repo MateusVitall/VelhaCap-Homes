@@ -39,7 +39,7 @@ function MyProperties() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await fetch("http://localhost:3000/imoveis/meus-imoveis", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/imoveis/meus-imoveis`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -65,7 +65,7 @@ function MyProperties() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await fetch(`http://localhost:3000/imoveis/${id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/imoveis/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -88,7 +88,7 @@ function MyProperties() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await fetch(`http://localhost:3000/imoveis/${id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/imoveis/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
