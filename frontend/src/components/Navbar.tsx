@@ -24,7 +24,7 @@ export function Navbar() {
         <Link to="/" className="flex items-center gap-2.5 group">
           <div className="leading-tight">
             <div className="font-display text-xl">
-              VelhaCap<span className="text-primary"> Homes</span>
+              Velha<span className="text-accent">Cap</span><span className="text-primary"> Homes</span>
             </div>
             <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground -mt-0.5">
               Imóveis · Piauí

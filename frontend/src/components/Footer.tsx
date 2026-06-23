@@ -6,7 +6,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-14 grid gap-10 md:grid-cols-4">
         <div className="md:col-span-1">
           <div className="flex items-center gap-2.5">
-            <div className="font-display text-xl">VelhaCap<span className="text-primary"> Homes</span></div>
+            <div className="font-display text-xl">Velha<span className="text-accent">Cap</span><span className="text-primary"> Homes</span></div>
           </div>
           <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
             A plataforma de locação de imóveis da primeira capital do Piauí. Conectando moradores e
