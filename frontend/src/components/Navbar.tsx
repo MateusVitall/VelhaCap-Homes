@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Home, LogOut, Menu, User as UserIcon } from "lucide-react";
+import { LogOut, Menu, User as UserIcon } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth, emitAuthChange } from "@/hooks/use-auth";
@@ -22,14 +22,10 @@ export function Navbar() {
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
         <Link to="/" className="flex items-center gap-2.5 group">
-          <span className="grid h-9 w-9 place-items-center rounded-md bg-primary text-primary-foreground transition-transform group-hover:scale-105">
-            <Home className="h-4.5 w-4.5" strokeWidth={2.2} />
-          </span>
           <div className="leading-tight">
             <div className="font-display text-xl">
-              Velha<span className="text-accent">Cap</span>
+              VelhaCap<span className="text-primary"> Homes</span>
             </div>
-            <div className="font-display text-xl -mt-1">Homes</div>
             <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground -mt-0.5">
               Imóveis · Piauí
             </div>

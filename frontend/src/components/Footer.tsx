@@ -1,5 +1,4 @@
 import { Link } from "@tanstack/react-router";
-import { Home } from "lucide-react";
 
 export function Footer() {
   return (
@@ -7,10 +6,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-14 grid gap-10 md:grid-cols-4">
         <div className="md:col-span-1">
           <div className="flex items-center gap-2.5">
-            <span className="grid h-9 w-9 place-items-center rounded-md bg-primary text-primary-foreground">
-              <Home className="h-4 w-4" />
-            </span>
-            <div className="font-display text-xl">Casa<span className="text-primary">Oeiras</span></div>
+            <div className="font-display text-xl">VelhaCap<span className="text-primary"> Homes</span></div>
           </div>
           <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
             A plataforma de locação de imóveis da primeira capital do Piauí. Conectando moradores e
