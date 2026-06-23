@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { formatBRL } from "@/lib/utils";
 
 export const Route = createFileRoute("/imoveis/$id")({
-  head: () => ({ meta: [{ title: "Detalhes do Imóvel — CasaOeiras" }] }),
+  head: () => ({ meta: [{ title: "Detalhes do Imóvel — VelhaCap-homes" }] }),
   component: PropertyDetail,
 });
 

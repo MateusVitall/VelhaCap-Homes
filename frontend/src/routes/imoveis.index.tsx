@@ -27,7 +27,7 @@ type Property = {
 };
 
 export const Route = createFileRoute("/imoveis/")({
-  head: () => ({ meta: [{ title: "Imóveis — CasaOeiras" }] }),
+  head: () => ({ meta: [{ title: "Imóveis — VelhaCap-homes" }] }),
   validateSearch: (s: Record<string, unknown>): SearchParams => ({
     q: typeof s.q === "string" ? s.q : undefined,
   }),

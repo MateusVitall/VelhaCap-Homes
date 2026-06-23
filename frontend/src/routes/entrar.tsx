@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { API_URL } from "@/lib/config";
 
 export const Route = createFileRoute("/entrar")({
-  head: () => ({ meta: [{ title: "Entrar — CasaOeiras" }] }),
+  head: () => ({ meta: [{ title: "Entrar — VelhaCap-homes" }] }),
   component: LoginPage,
 });
 

@@ -7,7 +7,7 @@ import { API_URL } from "@/lib/config";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/painel/imoveis")({
-  head: () => ({ meta: [{ title: "Meus Imóveis — CasaOeiras" }] }),
+  head: () => ({ meta: [{ title: "Meus Imóveis — VelhaCap-homes" }] }),
   component: MyProperties,
 });
 

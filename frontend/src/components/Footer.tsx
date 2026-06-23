@@ -39,7 +39,7 @@ export function Footer() {
       </div>
       <div className="border-t border-border">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-5 text-xs text-muted-foreground flex flex-wrap items-center justify-between gap-2">
-          <span>© {new Date().getFullYear()} CasaOeiras. Todos os direitos reservados.</span>
+          <span>© {new Date().getFullYear()} VelhaCap-homes. Todos os direitos reservados.</span>
           <span>Feito com cuidado em Oeiras-PI.</span>
         </div>
       </div>

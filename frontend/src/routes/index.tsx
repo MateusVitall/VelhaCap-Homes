@@ -14,7 +14,7 @@ import heroImg from "@/assets/hero-oeiras.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "CasaOeiras — Aluguel de imóveis em Oeiras-PI" },
+      { title: "VelhaCap-homes — Aluguel de imóveis em Oeiras-PI" },
       {
         name: "description",
         content:
@@ -22,7 +22,7 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content: "CasaOeiras — Imóveis para alugar em Oeiras-PI",
+        content: "VelhaCap-homes — Imóveis para alugar em Oeiras-PI",
       },
       {
         property: "og:description",

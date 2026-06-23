@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth, emitAuthChange } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/painel")({
-  head: () => ({ meta: [{ title: "Meu painel — CasaOeiras" }] }),
+  head: () => ({ meta: [{ title: "Meu painel — VelhaCap-homes" }] }),
   component: DashboardLayout,
 });
 
