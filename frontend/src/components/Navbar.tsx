@@ -27,8 +27,9 @@ export function Navbar() {
           </span>
           <div className="leading-tight">
             <div className="font-display text-xl">
-              VelhaCap<span className="text-primary"> Homes</span>
+              Velha<span className="text-accent">Cap</span>
             </div>
+            <div className="font-display text-xl -mt-1">Homes</div>
             <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground -mt-0.5">
               Imóveis · Piauí
             </div>
