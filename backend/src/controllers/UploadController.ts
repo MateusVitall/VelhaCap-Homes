@@ -10,10 +10,8 @@ export class UploadController {
       });
     }
 
-    const baseUrl = process.env.APP_URL || "http://localhost:3000";
-
     return res.status(201).json({
-      url: `${baseUrl}/uploads/${file.filename}`,
+      url: file.path,
     });
   }
 }

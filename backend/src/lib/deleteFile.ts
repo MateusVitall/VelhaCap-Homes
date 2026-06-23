@@ -1,20 +1,13 @@
-import fs from "fs";
-import path from "path";
-
-const UPLOADS_DIR = path.resolve("uploads");
+import { v2 as cloudinary } from "cloudinary";
 
 export function deleteUploadedImage(url: string) {
-  const baseUrl = process.env.APP_URL || "http://localhost:3000";
-  const prefix = `${baseUrl}/uploads/`;
+  if (!url.includes("res.cloudinary.com")) return;
 
-  if (!url.startsWith(prefix)) return;
+  const parts = url.split("/");
+  const folderAndFile = parts.slice(parts.indexOf("upload") + 1).join("/");
+  const publicId = folderAndFile.replace(/\.[^.]+$/, "");
 
-  const filename = url.slice(prefix.length);
-  const filePath = path.join(UPLOADS_DIR, filename);
-
-  fs.unlink(filePath, (err) => {
-    if (err && err.code !== "ENOENT") {
-      console.error("Erro ao deletar imagem:", filePath, err.message);
-    }
+  cloudinary.uploader.destroy(publicId).catch((err) => {
+    console.error("Erro ao deletar imagem do Cloudinary:", publicId, err.message);
   });
 }

@@ -1,7 +1,6 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import path from "path";
 
 import { userRoutes } from "./routes/user.routes";
 import { imovelRoutes } from "./routes/imovel.routes";
@@ -15,11 +14,6 @@ app.use(cors({
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 }));
-
-app.use(
-  "/uploads",
-  express.static(path.resolve("uploads"))
-);
 
 app.use("/upload", uploadRoutes);
 
