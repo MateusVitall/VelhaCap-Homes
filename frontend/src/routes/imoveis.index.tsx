@@ -94,7 +94,7 @@ function ListingPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-12">
           <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Catálogo</span>
 
-          <h1 className="font-display text-4xl md:text-5xl mt-2">Imóveis disponíveis em Oeiras</h1>
+          <h1 className="font-display text-4xl md:text-5xl mt-2">Imóveis disponíveis</h1>
 
           <div className="mt-7 grid gap-3 md:grid-cols-[1fr_auto_auto_auto_auto]">
             <div className="flex items-center gap-2 rounded-md border border-border bg-background px-3">
