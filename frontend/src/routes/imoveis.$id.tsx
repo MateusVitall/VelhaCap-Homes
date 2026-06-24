@@ -200,8 +200,11 @@ function PropertyDetail() {
                   className="w-full mt-5 gap-2"
                   onClick={() => {
                     fetch(`${API_URL}/imoveis/${id}/contato`, { method: "POST" }).catch(() => {});
+                    const msg = encodeURIComponent(
+                      `Olá ${property.ownerName || "proprietário"}, Vi seu anúncio no VelhaCap Homes e fiquei interessado!`
+                    );
                     window.open(
-                      `https://wa.me/55${property.ownerPhone!.replace(/\D/g, "")}`,
+                      `https://wa.me/55${property.ownerPhone!.replace(/\D/g, "")}?text=${msg}`,
                       "_blank",
                       "noreferrer"
                     );
