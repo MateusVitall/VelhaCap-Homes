@@ -47,6 +47,8 @@ function PropertyDetail() {
         const data = await response.json();
 
         setProperty(data);
+
+        fetch(`${API_URL}/imoveis/${id}/view`, { method: "POST" }).catch(() => {});
       } catch (error) {
         console.error(error);
       } finally {
@@ -193,16 +195,21 @@ function PropertyDetail() {
 
             {property.ownerPhone && (
               <>
-                <a
-                  href={`https://wa.me/55${property.ownerPhone.replace(/\D/g, "")}`}
-                  target="_blank"
-                  rel="noreferrer"
+                <button
+                  onClick={() => {
+                    fetch(`${API_URL}/imoveis/${id}/contato`, { method: "POST" }).catch(() => {});
+                    window.open(
+                      `https://wa.me/55${property.ownerPhone!.replace(/\D/g, "")}`,
+                      "_blank",
+                      "noreferrer"
+                    );
+                  }}
                 >
                   <Button size="lg" className="w-full mt-5 gap-2">
                     <Phone className="h-4 w-4" />
                     Entrar em contato
                   </Button>
-                </a>
+                </button>
 
                 <p className="mt-3 text-xs text-muted-foreground text-center">
                   {property.ownerPhone}

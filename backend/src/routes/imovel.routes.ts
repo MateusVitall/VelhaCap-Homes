@@ -12,6 +12,12 @@ imovelRoutes.get("/", imovelController.list);
 
 imovelRoutes.get("/meus-imoveis", authMiddleware, imovelController.myImoveis);
 
+imovelRoutes.get("/stats", authMiddleware, imovelController.getStats);
+
+imovelRoutes.post("/:id/view", imovelController.registerView);
+
+imovelRoutes.post("/:id/contato", imovelController.registerContact);
+
 imovelRoutes.get("/:id", imovelController.show);
 
 imovelRoutes.delete("/:id", authMiddleware, imovelController.delete);

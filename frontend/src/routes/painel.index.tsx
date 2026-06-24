@@ -13,26 +13,26 @@ export const Route = createFileRoute("/painel/")({
 function DashboardHome() {
   const { user } = useAuth();
 
-  const [totalImoveis, setTotalImoveis] = useState(0);
+  const [stats, setStats] = useState({ totalImoveis: 0, totalViews: 0, totalContatos: 0 });
 
   useEffect(() => {
     async function carregarResumo() {
       try {
         const token = localStorage.getItem("token");
 
-        const response = await fetch(`${API_URL}/imoveis/meus-imoveis`, {
+        const response = await fetch(`${API_URL}/imoveis/stats`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
         if (!response.ok) {
-          throw new Error("Erro ao carregar imóveis");
+          throw new Error("Erro ao carregar estatísticas");
         }
 
         const data = await response.json();
 
-        setTotalImoveis(data.length);
+        setStats(data);
       } catch (error) {
         console.error(error);
       }
@@ -62,12 +62,20 @@ function DashboardHome() {
         <Card
           icon={<Building className="h-5 w-5" />}
           label="Imóveis ativos"
-          value={String(totalImoveis)}
+          value={String(stats.totalImoveis)}
         />
 
-        <Card icon={<TrendingUp className="h-5 w-5" />} label="Visualizações" value="—" />
+        <Card
+          icon={<TrendingUp className="h-5 w-5" />}
+          label="Visualizações"
+          value={String(stats.totalViews)}
+        />
 
-        <Card icon={<ListPlus className="h-5 w-5" />} label="Contatos recebidos" value="—" />
+        <Card
+          icon={<ListPlus className="h-5 w-5" />}
+          label="Contatos recebidos"
+          value={String(stats.totalContatos)}
+        />
       </div>
 
       <div className="mt-10 rounded-xl border border-border bg-card p-8">

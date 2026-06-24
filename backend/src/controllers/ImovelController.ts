@@ -214,4 +214,67 @@ export class ImovelController {
       });
     }
   }
+
+  async registerView(req: Request, res: Response) {
+    try {
+      const id = String(req.params.id);
+
+      await prisma.imovel.update({
+        where: { id },
+        data: { viewsCount: { increment: 1 } },
+      });
+
+      return res.status(204).send();
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ error: "Erro ao registrar visualização" });
+    }
+  }
+
+  async registerContact(req: Request, res: Response) {
+    try {
+      const id = String(req.params.id);
+
+      const imovel = await prisma.imovel.findUnique({ where: { id } });
+
+      if (!imovel) {
+        return res.status(404).json({ error: "Imóvel não encontrado" });
+      }
+
+      await prisma.contato.create({
+        data: { imovelId: id },
+      });
+
+      return res.status(201).json({ message: "Contato registrado" });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ error: "Erro ao registrar contato" });
+    }
+  }
+
+  async getStats(req: Request, res: Response) {
+    try {
+      const imoveis = await prisma.imovel.findMany({
+        where: { userId: req.userId },
+        select: { id: true, viewsCount: true },
+      });
+
+      const totalViews = imoveis.reduce((sum, i) => sum + i.viewsCount, 0);
+
+      const totalContatos = await prisma.contato.count({
+        where: {
+          imovel: { userId: req.userId },
+        },
+      });
+
+      return res.json({
+        totalImoveis: imoveis.length,
+        totalViews,
+        totalContatos,
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ error: "Erro ao buscar estatísticas" });
+    }
+  }
 }

@@ -42,8 +42,18 @@ model Imovel {
 
   imagens     String[]
 
+  viewsCount  Int      @default(0)
+  contatos    Contato[]
+
   createdAt   DateTime @default(now())
 
   userId      String?
   user        User? @relation(fields: [userId], references: [id])
+}
+
+model Contato {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  imovelId  String
+  imovel    Imovel   @relation(fields: [imovelId], references: [id], onDelete: Cascade)
 }
