@@ -39,8 +39,8 @@ export function PropertyForm({
   const [city, setCity] = useState(initial?.city ?? "Oeiras");
   const [neighborhood, setNeighborhood] = useState(initial?.neighborhood ?? "");
   const [tipo, setTipo] = useState(initial?.tipo ?? "Casa");
-  const [bedrooms, setBedrooms] = useState<number>(initial?.bedrooms ?? 1);
-  const [bathrooms, setBathrooms] = useState<number>(initial?.bathrooms ?? 1);
+  const [bedrooms, setBedrooms] = useState<number | "">(initial?.bedrooms ?? 1);
+  const [bathrooms, setBathrooms] = useState<number | "">(initial?.bathrooms ?? 1);
   const [garage, setGarage] = useState<boolean>(initial?.garage ?? false);
   const [ownerName, setOwnerName] = useState(initial?.ownerName ?? defaultOwnerName);
   const [ownerPhone, setOwnerPhone] = useState(initial?.ownerPhone ?? "");
@@ -90,8 +90,8 @@ export function PropertyForm({
       city,
       neighborhood,
       tipo,
-      bedrooms,
-      bathrooms,
+      bedrooms: Number(bedrooms),
+      bathrooms: Number(bathrooms),
       garage,
       images,
       ownerName,
@@ -149,7 +149,7 @@ export function PropertyForm({
           <select
             value={tipo}
             onChange={(e) => setTipo(e.target.value)}
-            className="flex h-10 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+            className="flex h-10 w-full rounded-md border border-border bg-white px-3 py-2 text-sm"
           >
             <option value="Casa">Casa</option>
             <option value="Apartamento">Apartamento</option>
@@ -164,7 +164,7 @@ export function PropertyForm({
               type="number"
               min={0}
               value={bedrooms}
-              onChange={(e) => setBedrooms(Number(e.target.value))}
+              onChange={(e) => setBedrooms(e.target.value === "" ? "" : Number(e.target.value))}
             />
           </Field>
           <Field label="Banheiros">
@@ -172,7 +172,7 @@ export function PropertyForm({
               type="number"
               min={0}
               value={bathrooms}
-              onChange={(e) => setBathrooms(Number(e.target.value))}
+              onChange={(e) => setBathrooms(e.target.value === "" ? "" : Number(e.target.value))}
             />
           </Field>
           <Field label="Garagem">

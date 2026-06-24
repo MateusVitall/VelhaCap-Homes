@@ -195,7 +195,9 @@ function PropertyDetail() {
 
             {property.ownerPhone && (
               <>
-                <button
+                <Button
+                  size="lg"
+                  className="w-full mt-5 gap-2"
                   onClick={() => {
                     fetch(`${API_URL}/imoveis/${id}/contato`, { method: "POST" }).catch(() => {});
                     window.open(
@@ -205,11 +207,9 @@ function PropertyDetail() {
                     );
                   }}
                 >
-                  <Button size="lg" className="w-full mt-5 gap-2">
-                    <Phone className="h-4 w-4" />
-                    Entrar em contato
-                  </Button>
-                </button>
+                  <Phone className="h-4 w-4" />
+                  Entrar em contato
+                </Button>
 
                 <p className="mt-3 text-xs text-muted-foreground text-center">
                   {property.ownerPhone}
