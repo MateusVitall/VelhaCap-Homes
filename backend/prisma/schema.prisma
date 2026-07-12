@@ -17,8 +17,7 @@ model User {
   id        String   @id @default(uuid())
   name      String
   email     String   @unique
-  password     String
-  telefone  String?
+  password  String
   createdAt DateTime @default(now())
 
   imoveis   Imovel[]

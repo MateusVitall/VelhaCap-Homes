@@ -12,17 +12,9 @@ export class ImovelController {
     try {
       const data = createImovelSchema.parse(req.body);
 
-      const usuario = await prisma.user.findUnique({
-        where: {
-          id: req.userId,
-        },
-      });
-
       const imovel = await prisma.imovel.create({
         data: {
           ...data,
-          ownerName: usuario?.name,
-          ownerPhone: usuario?.telefone,
           userId: req.userId,
         },
       });
