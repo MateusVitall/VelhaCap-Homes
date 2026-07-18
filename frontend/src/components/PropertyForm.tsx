@@ -7,6 +7,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { uploadImage } from "@/lib/api";
 
+function formatPrice(value: number | ""): string {
+  if (value === "") return "";
+  return value.toLocaleString("pt-BR", { maximumFractionDigits: 2 });
+}
+
+function parsePriceInput(input: string): number | "" {
+  const cleaned = input.replace(/\./g, "").replace(",", ".");
+  if (cleaned === "") return "";
+  const num = parseFloat(cleaned);
+  return isNaN(num) ? "" : num;
+}
+
 export type PropertyFormValues = {
   title: string;
   description: string;
@@ -67,22 +79,6 @@ export function PropertyForm({
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log("SUBMIT DISPARADO");
-
-    console.log({
-      title,
-      description,
-      price,
-      city,
-      neighborhood,
-      bedrooms,
-      bathrooms,
-      garage,
-      ownerName,
-      ownerPhone,
-      images,
-    });
-
     onSubmit({
       title,
       description,
@@ -123,11 +119,11 @@ export function PropertyForm({
           <Field label="Preço mensal (R$)">
             <Input
               required
-              type="number"
-              min={0}
-              value={price}
-              onChange={(e) => setPrice(e.target.value === "" ? "" : Number(e.target.value))}
-              placeholder="1500"
+              type="text"
+              inputMode="decimal"
+              value={formatPrice(price)}
+              onChange={(e) => setPrice(parsePriceInput(e.target.value))}
+              placeholder="1.500"
             />
           </Field>
           <Field label="Cidade">
