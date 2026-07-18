@@ -23,8 +23,9 @@ type Imovel = {
   imagens: string[];
 };
 
-function formatBRL(valor: number) {
-  return valor.toLocaleString("pt-BR", {
+function formatBRL(valor: number | string) {
+  const value = typeof valor === "string" ? parseFloat(valor) : valor;
+  return (value || 0).toLocaleString("pt-BR", {
     style: "currency",
     currency: "BRL",
   });

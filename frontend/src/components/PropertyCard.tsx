@@ -15,8 +15,9 @@ type Property = {
   imagens: string[];
 };
 
-function formatBRL(valor?: number) {
-  return (valor ?? 0).toLocaleString("pt-BR", {
+function formatBRL(valor?: number | string) {
+  const value = typeof valor === "string" ? parseFloat(valor) : (valor ?? 0);
+  return (value || 0).toLocaleString("pt-BR", {
     style: "currency",
     currency: "BRL",
   });
