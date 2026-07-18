@@ -14,9 +14,10 @@ const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
   console.error("❌ Variáveis de ambiente inválidas:");
-  parsed.error.flatten().fieldErrors.forEach((errors, field) => {
-    console.error(`  ${field}: ${errors.join(", ")}`);
-  });
+  const fieldErrors = parsed.error.flatten().fieldErrors;
+  for (const [field, errors] of Object.entries(fieldErrors)) {
+    console.error(`  ${field}: ${(errors ?? []).join(", ")}`);
+  }
   process.exit(1);
 }
 
