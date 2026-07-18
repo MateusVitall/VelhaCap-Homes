@@ -6,10 +6,17 @@ import bcrypt from "bcryptjs";
 
 import jwt from "jsonwebtoken";
 
+import { z } from "zod";
+
+const loginSchema = z.object({
+  email: z.string().email("Email inválido"),
+  password: z.string().min(1, "Senha obrigatória"),
+});
+
 export class AuthController {
   async login(req: Request, res: Response) {
     try {
-      const { email, password } = req.body;
+      const { email, password } = loginSchema.parse(req.body);
 
       const user = await prisma.user.findUnique({
         where: {
@@ -37,7 +44,7 @@ export class AuthController {
         },
         process.env.JWT_SECRET!,
         {
-          expiresIn: "7d",
+          expiresIn: "1d",
         },
       );
 
@@ -50,6 +57,12 @@ export class AuthController {
         },
       });
     } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({
+          errors: error.flatten().fieldErrors,
+        });
+      }
+
       return res.status(500).json({
         error: "Erro ao fazer login",
       });

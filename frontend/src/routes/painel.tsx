@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { Home, LayoutDashboard, ListPlus, LogOut, Building } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { useAuth, emitAuthChange } from "@/hooks/use-auth";
+import { useAuth, logout as authLogout } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/painel")({
   head: () => ({ meta: [{ title: "Meu painel — VelhaCap-homes" }] }),
@@ -12,9 +12,6 @@ export const Route = createFileRoute("/painel")({
 
 function DashboardLayout() {
   const { user, ready } = useAuth();
-
-  console.log("PAINEL USER:", user);
-  console.log("PAINEL READY:", ready);
 
   const navigate = useNavigate();
   const path = useRouterState({ select: (s) => s.location.pathname });
@@ -36,11 +33,7 @@ function DashboardLayout() {
   ] as const;
 
   const onLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("oeiras_user");
-
-    emitAuthChange();
-
+    authLogout();
     navigate({ to: "/" });
   };
 

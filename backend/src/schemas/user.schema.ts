@@ -14,7 +14,7 @@ export const createUserSchema = z.object({
 
   password: z
     .string()
-    .min(6, "Senha muito curta")
-    .max(20, "Senha muito longa"),
+    .min(8, "Senha muito curta (mínimo 8 caracteres)")
+    .max(128, "Senha muito longa"),
 
 });

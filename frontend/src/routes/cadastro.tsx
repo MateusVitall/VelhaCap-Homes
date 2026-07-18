@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { API_URL } from "@/lib/config";
+import { registerSchema } from "@/lib/validations";
 
 export const Route = createFileRoute("/cadastro")({
   head: () => ({ meta: [{ title: "Criar conta — VelhaCap-homes" }] }),
@@ -23,8 +24,11 @@ function RegisterPage() {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (password.length < 6) {
-      toast.error("A senha deve ter pelo menos 6 caracteres.");
+    const parsed = registerSchema.safeParse({ name, email, password });
+    if (!parsed.success) {
+      const firstError = parsed.error.flatten().fieldErrors;
+      const msg = Object.values(firstError).flat()[0] || "Dados inválidos";
+      toast.error(msg);
       return;
     }
 
@@ -46,7 +50,7 @@ function RegisterPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Erro ao criar conta");
+        throw new Error("Não foi possível criar a conta");
       }
 
       toast.success("Conta criada com sucesso!");

@@ -198,16 +198,19 @@ function PropertyDetail() {
                 <Button
                   size="lg"
                   className="w-full mt-5 gap-2"
-                  onClick={() => {
+                                      onClick={() => {
                     fetch(`${API_URL}/imoveis/${id}/contato`, { method: "POST" }).catch(() => {});
-                    const msg = encodeURIComponent(
-                      `Olá ${property.ownerName || "proprietário"}, Vi seu anúncio no VelhaCap Homes e fiquei interessado!`
-                    );
-                    window.open(
-                      `https://wa.me/55${property.ownerPhone!.replace(/\D/g, "")}?text=${msg}`,
-                      "_blank",
-                      "noreferrer"
-                    );
+                    const digits = property.ownerPhone!.replace(/\D/g, "");
+                    if (digits.length >= 10 && digits.length <= 13) {
+                      const msg = encodeURIComponent(
+                        `Olá ${property.ownerName || "proprietário"}, Vi seu anúncio no VelhaCap Homes e fiquei interessado!`
+                      );
+                      window.open(
+                        `https://wa.me/55${digits}?text=${msg}`,
+                        "_blank",
+                        "noreferrer"
+                      );
+                    }
                   }}
                 >
                   <Phone className="h-4 w-4" />

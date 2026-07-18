@@ -51,3 +51,11 @@ export function emitAuthChange() {
     window.dispatchEvent(new Event("auth-changed"));
   }
 }
+
+export function logout() {
+  if (typeof window === "undefined") return;
+  localStorage.removeItem("token");
+  localStorage.removeItem("oeiras_session");
+  localStorage.removeItem("oeiras_user");
+  emitAuthChange();
+}

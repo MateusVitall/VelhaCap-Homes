@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { API_URL } from "@/lib/config";
+import { loginSchema } from "@/lib/validations";
 
 export const Route = createFileRoute("/entrar")({
   head: () => ({ meta: [{ title: "Entrar — VelhaCap-homes" }] }),
@@ -21,6 +22,14 @@ function LoginPage() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const parsed = loginSchema.safeParse({ email, password });
+    if (!parsed.success) {
+      const firstError = parsed.error.flatten().fieldErrors;
+      const msg = Object.values(firstError).flat()[0] || "Dados inválidos";
+      toast.error(msg);
+      return;
+    }
 
     setLoading(true);
 
@@ -38,10 +47,8 @@ function LoginPage() {
 
       const data = await response.json();
 
-      console.log(data);
-
       if (!response.ok) {
-        throw new Error(data.error || "Erro ao entrar");
+        throw new Error("E-mail ou senha inválidos");
       }
 
       // Salva o token JWT
@@ -50,9 +57,6 @@ function LoginPage() {
       // Salva a sessão que o painel antigo procura
       localStorage.setItem("oeiras_session", data.user.id);
       localStorage.setItem("oeiras_user", JSON.stringify(data.user));
-
-      console.log("TOKEN:", data.token);
-      console.log("USER:", data.user);
 
       toast.success("Bem-vindo de volta!");
 

@@ -58,7 +58,9 @@ export class UserController {
   async list(req: Request, res: Response) {
     try {
 
-      const users = await prisma.user.findMany();
+      const users = await prisma.user.findMany({
+        select: { id: true, name: true, email: true, createdAt: true },
+      });
 
       return res.json(users);
 

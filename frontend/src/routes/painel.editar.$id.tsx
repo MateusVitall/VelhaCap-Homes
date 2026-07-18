@@ -79,13 +79,6 @@ function EditProperty() {
           try {
             const token = localStorage.getItem("token");
 
-            console.log("ID SENDO EDITADO:", id);
-
-            console.log("VALORES ENVIADOS:", {
-              titulo: values.title,
-              preco: values.price,
-            });
-
             const response = await fetch(`${API_URL}/imoveis/${id}`, {
               method: "PUT",
               headers: {
@@ -112,7 +105,6 @@ function EditProperty() {
             const data = await response.json();
 
             if (!response.ok) {
-              console.log(data);
               throw new Error();
             }
 

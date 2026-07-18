@@ -49,6 +49,11 @@ function ListingPage() {
     async function loadProperties() {
       try {
         const response = await fetch(`${API_URL}/imoveis`);
+
+        if (!response.ok) {
+          throw new Error("Erro ao carregar imóveis");
+        }
+
         const data = await response.json();
         setProperties(data);
       } catch (error) {
@@ -87,7 +92,6 @@ function ListingPage() {
     });
   }, [properties, q, tipoFilter, minRooms, maxPrice]);
 
-  console.log("Primeiro imóvel:", filteredProperties[0]);
   return (
     <SiteLayout>
       <section className="border-b border-border bg-secondary/40">

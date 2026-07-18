@@ -42,7 +42,7 @@ export class ImovelController {
           disponivel: true,
         },
         include: {
-          user: true,
+          user: { select: { id: true, name: true, email: true } },
         },
         orderBy: {
           createdAt: "desc",
@@ -66,7 +66,7 @@ export class ImovelController {
       const imovel = await prisma.imovel.findUnique({
         where: { id },
         include: {
-          user: true,
+          user: { select: { id: true, name: true, email: true } },
         },
       });
 
@@ -163,7 +163,7 @@ export class ImovelController {
         where: { id },
         data,
         include: {
-          user: true,
+          user: { select: { id: true, name: true, email: true } },
         },
       });
 
@@ -190,7 +190,7 @@ export class ImovelController {
           userId: req.userId,
         },
         include: {
-          user: true,
+          user: { select: { id: true, name: true, email: true } },
         },
         orderBy: {
           createdAt: "desc",

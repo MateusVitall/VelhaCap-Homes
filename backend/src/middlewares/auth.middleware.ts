@@ -14,7 +14,19 @@ export function authMiddleware(
     });
   }
 
-  const [, token] = authHeader.split(" ");
+  if (!authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({
+      error: "Formato de token inválido",
+    });
+  }
+
+  const token = authHeader.substring(7);
+
+  if (!token) {
+    return res.status(401).json({
+      error: "Token não informado",
+    });
+  }
 
   try {
     const decoded = jwt.verify(

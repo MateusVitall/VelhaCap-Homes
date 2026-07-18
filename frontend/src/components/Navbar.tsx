@@ -2,7 +2,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { LogOut, Menu, User as UserIcon } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useAuth, emitAuthChange } from "@/hooks/use-auth";
+import { useAuth, logout as authLogout } from "@/hooks/use-auth";
 
 export function Navbar() {
   const { user } = useAuth();
@@ -10,11 +10,7 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("oeiras_user");
-
-    emitAuthChange();
-
+    authLogout();
     navigate({ to: "/" });
   };
 

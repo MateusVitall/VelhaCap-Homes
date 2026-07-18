@@ -21,13 +21,15 @@ model User {
   createdAt DateTime @default(now())
 
   imoveis   Imovel[]
+
+  @@index([email])
 }
 
 model Imovel {
   id          String   @id @default(uuid())
   titulo      String
   descricao   String
-  preco       Float
+  preco       Decimal  @db.Decimal(10, 2)
   cidade      String
   bairro      String
   tipo        String   @default("Casa")
@@ -48,6 +50,10 @@ model Imovel {
 
   userId      String?
   user        User? @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([disponivel])
+  @@index([createdAt])
 }
 
 model Contato {
@@ -55,4 +61,6 @@ model Contato {
   createdAt DateTime @default(now())
   imovelId  String
   imovel    Imovel   @relation(fields: [imovelId], references: [id], onDelete: Cascade)
+
+  @@index([imovelId])
 }
