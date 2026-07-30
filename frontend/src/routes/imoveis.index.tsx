@@ -67,11 +67,16 @@ function ListingPage() {
   }, []);
 
   const filteredProperties = useMemo(() => {
-    return properties.filter((p) => {
-      if (q) {
-        const text = `${p.titulo} ${p.bairro} ${p.descricao}`.toLowerCase();
+    const normalize = (s: string) =>
+      s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
-        if (!text.includes(q.toLowerCase())) {
+    const qNorm = q ? normalize(q) : "";
+
+    return properties.filter((p) => {
+      if (qNorm) {
+        const text = normalize(`${p.titulo} ${p.bairro} ${p.descricao}`);
+
+        if (!text.includes(qNorm)) {
           return false;
         }
       }
@@ -100,7 +105,7 @@ function ListingPage() {
 
           <h1 className="font-display text-4xl md:text-5xl mt-2">Imóveis disponíveis</h1>
 
-          <div className="mt-7 grid gap-3 md:grid-cols-[1fr_auto_auto_auto_auto]">
+          <div className="mt-7 grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-[1fr_auto_auto_auto_auto]">
             <div className="flex items-center gap-2 rounded-md border border-border bg-background px-3">
               <Search className="h-4 w-4 text-muted-foreground" />
 

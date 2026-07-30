@@ -23,6 +23,10 @@ function formatBRL(valor?: number | string) {
   });
 }
 
+function pluralize(value: number, singular: string, plural: string) {
+  return value === 1 ? singular : plural;
+}
+
 export function PropertyCard({ property }: { property: Property }) {
   const isUnavailable = property.disponivel === false;
 
@@ -71,12 +75,12 @@ export function PropertyCard({ property }: { property: Property }) {
         <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-foreground/80">
           <span className="inline-flex items-center gap-1.5">
             <BedDouble className="h-4 w-4 text-primary" />
-            {property.quartos} quartos
+            {property.quartos} {pluralize(property.quartos, "quarto", "quartos")}
           </span>
 
           <span className="inline-flex items-center gap-1.5">
             <Bath className="h-4 w-4 text-primary" />
-            {property.banheiros} banh.
+            {property.banheiros} {pluralize(property.banheiros, "banheiro", "banheiros")}
           </span>
 
           {property.garagem && (

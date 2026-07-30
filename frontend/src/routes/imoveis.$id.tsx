@@ -108,7 +108,7 @@ function PropertyDetail() {
             />
           </div>
 
-          <div className="grid grid-cols-3 md:grid-cols-1 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {images.slice(0, 3).map((src, i) => (
               <button
                 key={i}
@@ -137,12 +137,12 @@ function PropertyDetail() {
           <div className="mt-6 flex flex-wrap gap-6 text-sm">
             <Feature
               icon={<BedDouble className="h-5 w-5" />}
-              label={`${property.quartos} quartos`}
+              label={`${property.quartos} ${pluralize(property.quartos, "quarto", "quartos")}`}
             />
 
             <Feature
               icon={<Bath className="h-5 w-5" />}
-              label={`${property.banheiros} banheiros`}
+              label={`${property.banheiros} ${pluralize(property.banheiros, "banheiro", "banheiros")}`}
             />
 
             <Feature
@@ -247,4 +247,8 @@ function Feature({ icon, label }: { icon: React.ReactNode; label: string }) {
       <span>{label}</span>
     </div>
   );
+}
+
+function pluralize(value: number, singular: string, plural: string) {
+  return value === 1 ? singular : plural;
 }

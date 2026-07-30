@@ -31,6 +31,10 @@ function formatBRL(valor: number | string) {
   });
 }
 
+function pluralize(value: number, singular: string, plural: string) {
+  return value === 1 ? singular : plural;
+}
+
 function MyProperties() {
   const navigate = useNavigate();
 
@@ -169,12 +173,12 @@ function MyProperties() {
                 <h3 className="font-display text-xl">{p.titulo}</h3>
 
                 <div className="text-sm text-muted-foreground">
-                  {p.tipo} · {p.bairro} · {p.quartos} quartos · {p.banheiros} banheiros
+                  {p.tipo} · {p.bairro} · {p.quartos} {pluralize(p.quartos, "quarto", "quartos")} · {p.banheiros} {pluralize(p.banheiros, "banheiro", "banheiros")}
                 </div>
 
                 <div className="mt-2 font-display text-xl text-primary">{formatBRL(p.preco)}</div>
 
-                <div className="mt-4 flex items-center gap-3">
+                <div className="mt-4 flex flex-wrap items-center gap-3">
                   <div className="flex items-center gap-2">
                     <Switch
                       checked={p.disponivel}
@@ -185,7 +189,7 @@ function MyProperties() {
                     </span>
                   </div>
 
-                  <div className="ml-auto flex gap-2">
+                  <div className="ml-auto flex flex-wrap gap-2">
                     <Button
                       variant="outline"
                       size="sm"

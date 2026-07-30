@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { Upload, X, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,6 +18,13 @@ function parsePriceInput(input: string): number | "" {
   if (cleaned === "") return "";
   const num = parseFloat(cleaned);
   return isNaN(num) ? "" : num;
+}
+
+function onlyNumericKeys(e: React.KeyboardEvent) {
+  const allowed = ["Backspace", "Tab", "ArrowLeft", "ArrowRight", "Delete", "Home", "End"];
+  if (allowed.includes(e.key)) return;
+  if (/^\d$/.test(e.key)) return;
+  e.preventDefault();
 }
 
 export type PropertyFormValues = {
@@ -79,6 +87,11 @@ export function PropertyForm({
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (images.length === 0) {
+      toast.error("Adicione pelo menos 1 foto do imóvel");
+      return;
+    }
+
     onSubmit({
       title,
       description,
@@ -102,7 +115,7 @@ export function PropertyForm({
           <Input
             required
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => setTitle(e.target.value.trimStart())}
             placeholder="Casa charmosa no Centro Histórico"
           />
         </Field>
@@ -123,17 +136,18 @@ export function PropertyForm({
               inputMode="decimal"
               value={formatPrice(price)}
               onChange={(e) => setPrice(parsePriceInput(e.target.value))}
+              onKeyDown={onlyNumericKeys}
               placeholder="1.500"
             />
           </Field>
           <Field label="Cidade">
-            <Input required value={city} onChange={(e) => setCity(e.target.value)} />
+            <Input required value={city} onChange={(e) => setCity(e.target.value.trimStart())} />
           </Field>
           <Field label="Bairro">
             <Input
               required
               value={neighborhood}
-              onChange={(e) => setNeighborhood(e.target.value)}
+              onChange={(e) => setNeighborhood(e.target.value.trimStart())}
               placeholder="Centro Histórico"
             />
           </Field>
@@ -160,6 +174,7 @@ export function PropertyForm({
               type="number"
               min={0}
               value={bedrooms}
+              onKeyDown={onlyNumericKeys}
               onChange={(e) => setBedrooms(e.target.value === "" ? "" : Number(e.target.value))}
             />
           </Field>
@@ -168,6 +183,7 @@ export function PropertyForm({
               type="number"
               min={0}
               value={bathrooms}
+              onKeyDown={onlyNumericKeys}
               onChange={(e) => setBathrooms(e.target.value === "" ? "" : Number(e.target.value))}
             />
           </Field>
@@ -185,7 +201,7 @@ export function PropertyForm({
       <Section title="Contato do anunciante">
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Nome">
-            <Input required value={ownerName} onChange={(e) => setOwnerName(e.target.value)} />
+            <Input required value={ownerName} onChange={(e) => setOwnerName(e.target.value.trimStart())} />
           </Field>
           <Field label="Telefone / WhatsApp">
             <Input

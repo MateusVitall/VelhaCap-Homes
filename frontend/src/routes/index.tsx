@@ -83,9 +83,14 @@ function HomePage() {
   const onSearch = (e: React.FormEvent) => {
     e.preventDefault();
 
+    const qNorm = q
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim();
+
     navigate({
       to: "/imoveis",
-      search: { q } as never,
+      search: { q: qNorm || q } as never,
     });
   };
 
@@ -123,7 +128,7 @@ function HomePage() {
 
           <form
             onSubmit={onSearch}
-            className="mt-9 flex max-w-xl gap-2 rounded-xl bg-background p-2 shadow-2xl"
+            className="mt-9 flex flex-col sm:flex-row max-w-xl gap-2 rounded-xl bg-background p-2 shadow-2xl"
           >
             <div className="flex flex-1 items-center gap-2 px-3">
               <Search className="h-4 w-4 text-muted-foreground" />

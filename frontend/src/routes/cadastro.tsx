@@ -87,8 +87,8 @@ function RegisterPage() {
               id="name"
               required
               value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Seu nome"
+              onChange={(e) => setName(e.target.value.trimStart())}
+              placeholder="Nome e sobrenome"
             />
           </div>
 
