@@ -20,7 +20,8 @@ export function Navbar() {
         <Link to="/" className="flex items-center gap-2.5 group">
           <div className="leading-tight">
             <div className="font-display text-xl">
-              Velha<span className="text-accent">Cap</span><span className="text-primary"> Homes</span>
+              Velha<span className="text-accent">Cap</span>
+              <span className="text-primary"> Homes</span>
             </div>
             <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground -mt-0.5">
               Imóveis · Piauí
@@ -69,16 +70,9 @@ export function Navbar() {
               </Button>
             </>
           ) : (
-            <>
-              <Link to="/entrar">
-                <Button variant="ghost" size="sm">
-                  Entrar
-                </Button>
-              </Link>
-              <Link to="/cadastro">
-                <Button size="sm">Cadastrar</Button>
-              </Link>
-            </>
+            <Link to="/entrar">
+              <Button size="sm">Anuncie imóvel</Button>
+            </Link>
           )}
         </div>
 
@@ -105,11 +99,11 @@ export function Navbar() {
                 Meu painel
               </Link>
             )}
-            <div className="mt-2 flex gap-2">
+            <div className="mt-2">
               {user ? (
                 <Button
                   variant="outline"
-                  className="flex-1"
+                  className="w-full"
                   onClick={() => {
                     handleLogout();
                     setOpen(false);
@@ -118,16 +112,9 @@ export function Navbar() {
                   Sair
                 </Button>
               ) : (
-                <>
-                  <Link to="/entrar" className="flex-1" onClick={() => setOpen(false)}>
-                    <Button variant="outline" className="w-full">
-                      Entrar
-                    </Button>
-                  </Link>
-                  <Link to="/cadastro" className="flex-1" onClick={() => setOpen(false)}>
-                    <Button className="w-full">Cadastrar</Button>
-                  </Link>
-                </>
+                <Link to="/entrar" onClick={() => setOpen(false)}>
+                  <Button className="w-full">Anuncie imóvel</Button>
+                </Link>
               )}
             </div>
           </div>
