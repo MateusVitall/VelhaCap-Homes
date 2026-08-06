@@ -48,6 +48,11 @@ function PropertyDetail() {
   const touchStart = useRef<number | null>(null);
   const touchEnd = useRef<number | null>(null);
 
+  const images =
+    property?.imagens?.length > 0
+      ? property.imagens
+      : ["https://placehold.co/800x600?text=Sem+Imagem"];
+
   const minSwipeDistance = 50;
 
   const onTouchStart = useCallback((e: React.TouchEvent) => {
@@ -118,11 +123,6 @@ function PropertyDetail() {
       </SiteLayout>
     );
   }
-
-  const images =
-    property.imagens?.length > 0
-      ? property.imagens
-      : ["https://placehold.co/800x600?text=Sem+Imagem"];
 
   return (
     <SiteLayout>
