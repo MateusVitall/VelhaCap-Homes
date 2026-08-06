@@ -1,6 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { ArrowLeft, Bath, BedDouble, Car, Mail, MapPin, Phone, User } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  ArrowLeft,
+  Bath,
+  BedDouble,
+  Car,
+  ChevronLeft,
+  ChevronRight,
+  Mail,
+  MapPin,
+  Phone,
+  User,
+} from "lucide-react";
 
 import { API_URL } from "@/lib/config";
 import { SiteLayout } from "@/components/SiteLayout";
@@ -34,6 +45,33 @@ function PropertyDetail() {
   const [active, setActive] = useState(0);
   const [loading, setLoading] = useState(true);
   const [property, setProperty] = useState<Property | null>(null);
+  const touchStart = useRef<number | null>(null);
+  const touchEnd = useRef<number | null>(null);
+
+  const minSwipeDistance = 50;
+
+  const onTouchStart = useCallback((e: React.TouchEvent) => {
+    touchEnd.current = null;
+    touchStart.current = e.targetTouches[0].clientX;
+  }, []);
+
+  const onTouchMove = useCallback((e: React.TouchEvent) => {
+    touchEnd.current = e.targetTouches[0].clientX;
+  }, []);
+
+  const onTouchEnd = useCallback(() => {
+    if (!touchStart.current || !touchEnd.current) return;
+    const distance = touchStart.current - touchEnd.current;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe && active < images.length - 1) {
+      setActive((prev) => prev + 1);
+    }
+    if (isRightSwipe && active > 0) {
+      setActive((prev) => prev - 1);
+    }
+  }, [active, images.length]);
 
   useEffect(() => {
     async function loadProperty() {
@@ -99,7 +137,8 @@ function PropertyDetail() {
       </div>
 
       <section className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="grid gap-3 md:grid-cols-[2fr_1fr]">
+        {/* Desktop: Grid layout */}
+        <div className="hidden md:grid gap-3 md:grid-cols-[2fr_1fr]">
           <div className="aspect-[16/11] overflow-hidden rounded-xl bg-muted">
             <img
               src={images[active]}
@@ -108,13 +147,67 @@ function PropertyDetail() {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 gap-3">
             {images.slice(0, 3).map((src, i) => (
               <button
                 key={i}
                 onClick={() => setActive(i)}
                 className={`aspect-[4/3] overflow-hidden rounded-lg bg-muted ring-2 transition-all ${
                   active === i ? "ring-primary" : "ring-transparent hover:ring-border"
+                }`}
+              >
+                <img src={src} alt="" className="h-full w-full object-cover" />
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile: Swipeable carousel */}
+        <div className="md:hidden">
+          <div
+            className="relative aspect-[4/3] overflow-hidden rounded-xl bg-muted"
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+          >
+            <img
+              src={images[active]}
+              alt={property.titulo}
+              className="h-full w-full object-cover"
+            />
+
+            {/* Navigation arrows */}
+            {active > 0 && (
+              <button
+                onClick={() => setActive((prev) => prev - 1)}
+                className="absolute left-2 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-black/50 text-white flex items-center justify-center"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+            )}
+            {active < images.length - 1 && (
+              <button
+                onClick={() => setActive((prev) => prev + 1)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-black/50 text-white flex items-center justify-center"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            )}
+
+            {/* Counter */}
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/60 px-3 py-1 text-xs text-white">
+              {active + 1} / {images.length}
+            </div>
+          </div>
+
+          {/* Thumbnail strip */}
+          <div className="mt-3 flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+            {images.map((src, i) => (
+              <button
+                key={i}
+                onClick={() => setActive(i)}
+                className={`flex-shrink-0 w-16 h-16 overflow-hidden rounded-lg ring-2 transition-all ${
+                  active === i ? "ring-primary" : "ring-transparent"
                 }`}
               >
                 <img src={src} alt="" className="h-full w-full object-cover" />
@@ -198,18 +291,14 @@ function PropertyDetail() {
                 <Button
                   size="lg"
                   className="w-full mt-5 gap-2"
-                                      onClick={() => {
+                  onClick={() => {
                     fetch(`${API_URL}/imoveis/${id}/contato`, { method: "POST" }).catch(() => {});
                     const digits = property.ownerPhone!.replace(/\D/g, "");
                     if (digits.length >= 10 && digits.length <= 13) {
                       const msg = encodeURIComponent(
-                        `Olá ${property.ownerName || "proprietário"}, Vi seu anúncio no VelhaCap Homes e fiquei interessado!`
+                        `Olá ${property.ownerName || "proprietário"}, Vi seu anúncio no VelhaCap Homes e fiquei interessado!`,
                       );
-                      window.open(
-                        `https://wa.me/55${digits}?text=${msg}`,
-                        "_blank",
-                        "noreferrer"
-                      );
+                      window.open(`https://wa.me/55${digits}?text=${msg}`, "_blank", "noreferrer");
                     }
                   }}
                 >
